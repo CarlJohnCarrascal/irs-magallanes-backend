@@ -28,7 +28,7 @@ class IncidentController extends BaseController
             if ($t == 'pending') {
                  $q = Incident::whereDate('datetime','=' ,$from_date)->where('status', '=', 'pending')->get();
             }else {
-                 $q = Incident::whereDate('datetime','=' ,$from_date)->get();
+                 $q = Incident::whereDate('datetime','=' ,$from_date)->where('status', '!=', 'pending')->get();
             }
             //return $this->sendResponse(Incident::whereDate('datetime','=' ,$from_date), 'Incident List.' . $from_date .' '. $to_date);
         }
@@ -38,7 +38,7 @@ class IncidentController extends BaseController
             if ($t == 'pending') {
                 $q = Incident::whereBetween('datetime', [$week_start, $week_end])->where('status', '=', 'pending')->get();
             }else {
-                $q = Incident::whereBetween('datetime', [$week_start, $week_end])->get();
+                $q = Incident::whereBetween('datetime', [$week_start, $week_end])->where('status', '!=', 'pending')->get();
             }
             //return $this->sendResponse(Incident::whereBetween('datetime', [$week_start, $week_end])->get(), 'Incident List.' . $week_start . '/'. $week_end);
         }
@@ -48,7 +48,7 @@ class IncidentController extends BaseController
             if ($t == 'pending') {
                 $q = Incident::whereBetween('datetime', [$month_start, $month_end])->where('status', '=', 'pending')->get();
             }else {
-                $q = Incident::whereBetween('datetime', [$month_start, $month_end])->get();
+                $q = Incident::whereBetween('datetime', [$month_start, $month_end])->where('status', '!=', 'pending')->get();
             }
             //return $this->sendResponse(Incident::whereBetween('datetime', [$month_start, $month_end])->get(), 'Incident List.' . $month_start . '/'. $month_end);
         }
@@ -57,7 +57,7 @@ class IncidentController extends BaseController
             if ($t == 'pending') {
                 $q = Incident::whereYear('datetime', $year)->where('status', '=', 'pending')->get();
             }else {
-                $q = Incident::whereYear('datetime', $year)->get();
+                $q = Incident::whereYear('datetime', $year)->where('status', '!=', 'pending')->get();
             }
         }
         if($s == 'all'){
@@ -77,7 +77,7 @@ class IncidentController extends BaseController
             if ($t == 'pending') {
                 $q = Incident::whereBetween('datetime', [$date_start, $date_end])->where('status', '=', 'pending')->get();
             }else {
-                $q = Incident::whereBetween('datetime', [$date_start, $date_end])->get();
+                $q = Incident::whereBetween('datetime', [$date_start, $date_end])->where('status', '!=', 'pending')->get();
             }
 
             $cc = $date_start . "-" . $date_end;
