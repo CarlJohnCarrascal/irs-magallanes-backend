@@ -46,53 +46,53 @@ class DatabaseSeeder extends Seeder
 
         }
         if(!Type::count()) {
-            $input['name'] = 'Medical Accident';
-            Type::create($input);
-            $input['name'] = 'Traumatic Accident';
-            Type::create($input);
+            $input1['name'] = 'Medical Accident';
+            Type::create($input1);
+            $input1['name'] = 'Traumatic Accident';
+            Type::create($input1);
         }
 
         $id = Type::all("id")->where("name","=","Medical Accident")->first(null,1);
         if (!IncidentCause::all()->where("type_id","=",$id)->count()) {
             
-            $input['type_id'] = $id;
+            $input2['type_id'] = $id;
 
-            $input['name'] = 'Cardiac arrest patient';
-            IncidentCause::create($input);
+            $input2['name'] = 'Cardiac arrest patient';
+            IncidentCause::create($input2);
 
-            $input['name'] = 'Stroke Patient';
-            IncidentCause::create($input);
+            $input2['name'] = 'Stroke Patient';
+            IncidentCause::create($input2);
 
-            $input['name'] = 'Diabetic emergencies';
-            $input['description'] = 'such as diabetic ketoacidosis or hypoglycemia';
-            IncidentCause::create($input);
+            $input2['name'] = 'Diabetic emergencies';
+            $input2['description'] = 'such as diabetic ketoacidosis or hypoglycemia';
+            IncidentCause::create($input2);
 
-            $input['name'] = 'Respiratory distress patients';
-            $input['description'] = 'such as those with severe asthma attacks or pneumothorax';
-            IncidentCause::create($input);
+            $input2['name'] = 'Respiratory distress patients';
+            $input2['description'] = 'such as those with severe asthma attacks or pneumothorax';
+            IncidentCause::create($input2);
         }
 
         $id = Type::all("id")->where("name","=","Traumatic Accident")->first(null,2);
         if (!IncidentCause::all()->where("type_id","=",$id)->count()) {
-            $input['type_id'] = $id;
+            $input3['type_id'] = $id;
 
-            $input['name'] = 'Motor vehicle accident victims';
-            IncidentCause::create($input);
+            $input3['name'] = 'Motor vehicle accident victims';
+            IncidentCause::create($input3);
 
-            $input['name'] = 'Gunshot or stab wound victims';
-            IncidentCause::create($input);
+            $input3['name'] = 'Gunshot or stab wound victims';
+            IncidentCause::create($input3);
 
-            $input['name'] = 'Falls from heights';
-            $input['description'] = '';
-            IncidentCause::create($input);
+            $input3['name'] = 'Falls from heights';
+            $input3['description'] = '';
+            IncidentCause::create($input3);
 
-            $input['name'] = 'Burns';
-            $input['description'] = 'thermal or chemical';
-            IncidentCause::create($input);
+            $input3['name'] = 'Burns';
+            $input3['description'] = 'thermal or chemical';
+            IncidentCause::create($input3);
 
-            $input['name'] = 'Crush injuries';
-            $input['description'] = 'such as in building collapses or heavy machinery accidents';
-            IncidentCause::create($input);
+            $input3['name'] = 'Crush injuries';
+            $input3['description'] = 'such as in building collapses or heavy machinery accidents';
+            IncidentCause::create($input3);
         }
     }
 }
