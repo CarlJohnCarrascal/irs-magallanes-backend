@@ -21,14 +21,16 @@ class IncidentController extends BaseController
         $r = $request->all();
         $s = $r['r'];
         $t = $r['t'];
+        $my = $r['my'];
+        $id = auth('api')->user()->id;
         $q = null;
         if ($s == 'today') {
             $from_date = date('Y-m-d');
             $to_date = date('Y-m-d');
             if ($t == 'pending') {
-                 $q = Incident::whereDate('datetime','=' ,$from_date)->where('status', '=', 'pending')->get();
+                $q = Incident::whereDate('datetime','=' ,$from_date)->where('status', '=', 'pending');
             }else {
-                 $q = Incident::whereDate('datetime','=' ,$from_date)->where('status', '!=', 'pending')->get();
+                 $q = Incident::whereDate('datetime','=' ,$from_date)->where('status', '!=', 'pending');
             }
             //return $this->sendResponse(Incident::whereDate('datetime','=' ,$from_date), 'Incident List.' . $from_date .' '. $to_date);
         }
@@ -36,9 +38,9 @@ class IncidentController extends BaseController
             $week_start = date("Y-m-d", strtotime('monday this week'));
             $week_end = date("Y-m-d", strtotime('sunday this week'));
             if ($t == 'pending') {
-                $q = Incident::whereBetween('datetime', [$week_start, $week_end])->where('status', '=', 'pending')->get();
+                $q = Incident::whereBetween('datetime', [$week_start, $week_end])->where('status', '=', 'pending');
             }else {
-                $q = Incident::whereBetween('datetime', [$week_start, $week_end])->where('status', '!=', 'pending')->get();
+                $q = Incident::whereBetween('datetime', [$week_start, $week_end])->where('status', '!=', 'pending');
             }
             //return $this->sendResponse(Incident::whereBetween('datetime', [$week_start, $week_end])->get(), 'Incident List.' . $week_start . '/'. $week_end);
         }
@@ -46,44 +48,48 @@ class IncidentController extends BaseController
             $month_start = date('Y-m-01');
             $month_end = date('Y-m-t');
             if ($t == 'pending') {
-                $q = Incident::whereBetween('datetime', [$month_start, $month_end])->where('status', '=', 'pending')->get();
+                $q = Incident::whereBetween('datetime', [$month_start, $month_end])->where('status', '=', 'pending');
             }else {
-                $q = Incident::whereBetween('datetime', [$month_start, $month_end])->where('status', '!=', 'pending')->get();
+                $q = Incident::whereBetween('datetime', [$month_start, $month_end])->where('status', '!=', 'pending');
             }
             //return $this->sendResponse(Incident::whereBetween('datetime', [$month_start, $month_end])->get(), 'Incident List.' . $month_start . '/'. $month_end);
         }
         if ($s == 'year') {
             $year = date('Y');
             if ($t == 'pending') {
-                $q = Incident::whereYear('datetime', $year)->where('status', '=', 'pending')->get();
+                $q = Incident::whereYear('datetime', $year)->where('status', '=', 'pending');
             }else {
-                $q = Incident::whereYear('datetime', $year)->where('status', '!=', 'pending')->get();
+                $q = Incident::whereYear('datetime', $year)->where('status', '!=', 'pending');
             }
         }
         if($s == 'all'){
             if ($t == 'pending') {
-                $q = Incident::where('status', '=', 'pending')->get();
+                $q = Incident::where('status', '=', 'pending');
             }
             else{
-                $q = Incident::where('status', '!=', 'pending')->get();
+                $q = Incident::where('status', '!=', 'pending');
             }
             //return $this->sendResponse(Incident::all(), 'Incident List.');            
         }
+        $cc = '';
         if($s == 'custom'){
             $cd1 = $r['cd1'];
             $cd2 = $r['cd2'];
             $date_start = date("Y-m-d", $cd1);
             $date_end = date("Y-m-d", $cd2);
             if ($t == 'pending') {
-                $q = Incident::whereBetween('datetime', [$date_start, $date_end])->where('status', '=', 'pending')->get();
+                $q = Incident::whereBetween('datetime', [$date_start, $date_end])
+                ->where('status', '=', 'pending');
             }else {
-                $q = Incident::whereBetween('datetime', [$date_start, $date_end])->where('status', '!=', 'pending')->get();
+                $q = Incident::whereBetween('datetime', [$date_start, $date_end])
+                ->where('status', '!=', 'pending');
             }
-
-            $cc = $date_start . "-" . $date_end;
+            $cc = $date_start . "-" . $date_end . "-" . $my;
+        }   
+        if ($my == "true"){
+            return $this->sendResponse($q->where('userid','=', $id)->get(), 'Incident List.' . $cc);           
         }
-
-        return $this->sendResponse($q, 'Incident List.');           
+        return $this->sendResponse($q->get(), 'Incident List.' . $cc);           
 
     }
     public function show(Incident $incident)
@@ -110,6 +116,8 @@ class IncidentController extends BaseController
         $input['userid'] = auth('api')->user()->id;
         if (auth('api')->user()->role == 'admin') {
             $input['status'] = 'on process';
+        }else{
+            $input['status'] = 'pending';
         }
         $input['causes'] = '';
         $incident = Incident::create($input);
@@ -167,7 +175,17 @@ class IncidentController extends BaseController
         $respo = $input['responder'];
         $re['leader'] = $respo['leader'];
         $re['driver'] = $respo['driver'];
-        $re['member'] = json_encode($respo['member']);
+        $re['member1'] = $respo['member1'];
+        $re['member2'] = $respo['member2'];
+        $re['member3'] = $respo['member3'];
+        $re['member4'] = $respo['member4'];
+        $re['member5'] = $respo['member5'];
+        $re['member6'] = $respo['member6'];
+        $re['member7'] = $respo['member7'];
+        $re['member8'] = $respo['member8'];
+        $re['member9'] = $respo['member9'];
+        $re['member10'] = $respo['member10'];
+
         $responder = Responder::create($re);
 
         $incident['informantdetail'] = $informant;
@@ -243,7 +261,17 @@ class IncidentController extends BaseController
         $respo = $input['responder'];
         $re['leader'] = $respo['leader'];
         $re['driver'] = $respo['driver'];
-        $re['member'] = json_encode($respo['member']);
+        $re['member1'] = $respo['member1'];
+        $re['member2'] = $respo['member2'];
+        $re['member3'] = $respo['member3'];
+        $re['member4'] = $respo['member4'];
+        $re['member5'] = $respo['member5'];
+        $re['member6'] = $respo['member6'];
+        $re['member7'] = $respo['member7'];
+        $re['member8'] = $respo['member8'];
+        $re['member9'] = $respo['member9'];
+        $re['member10'] = $respo['member10'];
+
         Responder::where('incidentid', $incident->id)->update($re);
 
         Informant::where('incidentid', $incident->id)->update($in);
@@ -293,7 +321,7 @@ class IncidentController extends BaseController
             $q = DB::table('patients')
             ->select('patients.*','incidents.datetime as incident_date','incidents.type as incident_type')
             ->join('incidents','incidents.id','=','patients.incidentid')
-            ->where('datetime','=', $from_date)
+            ->whereDate('datetime','=', $from_date)
             ->get();
         }
         if ($s == 'week') {
