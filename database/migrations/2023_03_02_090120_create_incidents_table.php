@@ -20,7 +20,7 @@ return new class extends Migration
             $table->bigInteger('patientid')->nullable();
             $table->string('type');
             $table->string('causes');
-            $table->timestamp('datetime');
+            $table->timestamp('datetime')->nullable();
             $table->string('barangay');
             $table->string('purok');
             $table->string('latitude')->nullable();
