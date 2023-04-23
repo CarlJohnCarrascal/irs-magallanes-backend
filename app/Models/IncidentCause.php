@@ -15,5 +15,14 @@ class IncidentCause extends Model
         'type_id',
         'name',
         'description',
+        'count',
     ];
+
+    protected $appends = [
+        'count'
+    ];
+
+    public function getCountAttribute(){
+        return Patient::all()->where('cause','=',$this->name)->count();
+    }
 }

@@ -72,4 +72,6 @@ class TypeController extends BaseController
         $type->delete();
         return $this->sendResponse($type, 'Incident Type deleted successfully!.');
     }
+
+    
 }

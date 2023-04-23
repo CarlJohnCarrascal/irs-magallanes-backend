@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\RegisterController;
 use App\Http\Controllers\API\IncidentController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\BarangayController;
+use App\Http\Controllers\API\ChartController;
 use App\Http\Controllers\API\TypeController;
 use App\Http\Controllers\API\IncidentCauseController;
 
@@ -51,5 +52,8 @@ Route::middleware('auth:api')->group( function() {
     Route::delete('deletetypes/{type}', [TypeController::class, 'deleteitem']);
     Route::apiResource('incident_causes', IncidentCauseController::class)->only(['index', 'store', 'destroy']);
     Route::get('indexbytype/{type}', [IncidentCauseController::class, 'indexbytype']);
+
+    //cahrting
+    Route::get('chart/accidents',[ChartController::class, 'accidenttypechart']);
 
 });

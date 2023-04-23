@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Barangay;
 use App\Models\IncidentCause;
 use App\Models\Type;
 use App\Models\User;
@@ -46,9 +47,9 @@ class DatabaseSeeder extends Seeder
 
         }
         if(!Type::count()) {
-            $input1['name'] = 'Medical Accident';
+            $input1['name'] = 'Medical';
             Type::create($input1);
-            $input1['name'] = 'Traumatic Accident';
+            $input1['name'] = 'Traumatic';
             Type::create($input1);
         }
 
@@ -93,6 +94,15 @@ class DatabaseSeeder extends Seeder
             $input3['name'] = 'Crush injuries';
             $input3['description'] = 'such as in building collapses or heavy machinery accidents';
             IncidentCause::create($input3);
+        }
+
+        if(!Barangay::count()) {
+            $brgy['name'] = 'Barangay 1';
+            Barangay::create($brgy);
+            $brgy['name'] = 'Barangay 2';
+            Barangay::create($brgy);
+            $brgy['name'] = 'Barangay 3';
+            Barangay::create($brgy);
         }
     }
 }

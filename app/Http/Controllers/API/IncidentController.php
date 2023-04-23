@@ -195,6 +195,14 @@ class IncidentController extends BaseController
     }
     public function update(Request $request, Incident $incident)
     {
+        $id = auth('api')->user()->id;
+        $role = auth('api')->user()->role;
+
+        if($role == 'admin' || $id == $incident->userid){
+        }else {
+            return $this->sendError('Unauthorised.', ['error' => 'You are not allowed for this operation!']);
+        }
+
         $fails = false;
         $validator = Validator::make($request->all(), [
             'type' => 'required',
@@ -281,11 +289,30 @@ class IncidentController extends BaseController
     }
     public function destroy(Incident $incident)
     {
-        Patient::all()->where('incidentid', $incident->id)->destroy();
-        Informant::all()->where('incidentid', $incident->id)->destroy();
-        Responder::all()->where('incidentid', $incident->id)->destroy();
-        $incident->delete();    
-        return $this->sendResponse('', 'Incident deleted successfully!.');
+        $id = auth('api')->user()->id;
+        $role = auth('api')->user()->role;
+
+        if($role == 'admin' || $id == $incident->userid)
+        {
+            if ($id == $incident->userid && $incident->status == 'pending'){
+                return $this->sendError('Unauthorised.', ['error' => 'You are not allowed for this operation!']);
+            }
+            DB::table('patients')
+            ->where('incidentid',$incident->id)
+            ->delete();
+            DB::table('informants')
+            ->where('incidentid',$incident->id)
+            ->delete();
+            DB::table('responders')
+            ->where('incidentid',$incident->id)
+            ->delete();
+            $incident->delete();    
+            return $this->sendResponse('', 'Incident deleted successfully!.');
+        }else {
+            return $this->sendError('Unauthorised.', ['error' => 'You are not allowed for this operation!']);
+        }
+
+        
     }
     public function updatestatus(Request $request, Incident $incident)
     {
