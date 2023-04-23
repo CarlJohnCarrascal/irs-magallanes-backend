@@ -55,5 +55,7 @@ Route::middleware('auth:api')->group( function() {
 
     //cahrting
     Route::get('chart/accidents',[ChartController::class, 'accidenttypechart']);
+    Route::get('chart/reportdata',[ChartController::class, 'incidentchart']);
+    Route::get('chart/barangay',[ChartController::class, 'barangaychart']);
 
 });
