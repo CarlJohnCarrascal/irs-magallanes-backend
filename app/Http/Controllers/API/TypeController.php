@@ -4,8 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Type;
+use App\Models\IncidentCause;
 use Illuminate\Http\Request;
 use Validator;
+use Illuminate\Support\Facades\DB;
+
 
 class TypeController extends BaseController
 {
@@ -31,6 +34,11 @@ class TypeController extends BaseController
         }
         $input = $request->all();
         $types = Type::create($input);
+
+        $c['type_id'] = $types->id;
+        $c['name'] = 'Other';
+        IncidentCause::create($c);
+
         return $this->sendResponse($types, 'Incident Type Store successfully.');
     }
 
@@ -59,7 +67,6 @@ class TypeController extends BaseController
     {
         $role = auth('api')->user()->role;
         if($role != 'admin') return $this->sendError('Unauthorized.', 'Unauthorized', 401);
-
         $types->delete();
         return $this->sendResponse($types, 'Incident Type deleted successfully!.');
     }
@@ -70,6 +77,7 @@ class TypeController extends BaseController
         if($role != 'admin') return $this->sendError('Unauthorized.', 'Unauthorized', 401);
 
         $type->delete();
+        IncidentCause::where('type_id','=',$type->id)->delete();
         return $this->sendResponse($type, 'Incident Type deleted successfully!.');
     }
 

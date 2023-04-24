@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validation;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends BaseController
 {
@@ -18,7 +19,17 @@ class UserController extends BaseController
         $user = auth('api')->user();
         if ($user->role == 'admin'){
             $input = $request->all();
-            return $this->sendResponse(User::all()->where('id',"!=", $user->id)->where('status','=',$input['request']), 'User List.');
+            $res = User::where('id',"!=", $user->id)
+            ->where('status','=',$input['request'])
+            ->where('role','!=','guest')
+            ->get();
+            // $res = DB::table('users')
+            // ->select('*')
+            // ->where('id',"!=", $user->id)
+            // ->where('status','=',$input['request'])
+            // ->where('role','!=','guest')
+            // ->get();
+            return $this->sendResponse($res, 'User List.');
         }else{
             return $this->sendError('Unauthorised.', ['error' => 'Your not allowed for this operation!']);
         }

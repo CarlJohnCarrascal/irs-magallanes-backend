@@ -71,6 +71,9 @@ class DatabaseSeeder extends Seeder
             $input2['name'] = 'Respiratory distress patients';
             $input2['description'] = 'such as those with severe asthma attacks or pneumothorax';
             IncidentCause::create($input2);
+
+            $input2['name'] = 'Other';
+            IncidentCause::create($input2);
         }
 
         $id = Type::all("id")->where("name","=","Traumatic Accident")->first(null,2);
@@ -94,6 +97,10 @@ class DatabaseSeeder extends Seeder
             $input3['name'] = 'Crush injuries';
             $input3['description'] = 'such as in building collapses or heavy machinery accidents';
             IncidentCause::create($input3);
+
+            $input2['name'] = 'Other';
+            IncidentCause::create($input2);
+            
         }
 
         if(!Barangay::count()) {
