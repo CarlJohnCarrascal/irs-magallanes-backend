@@ -7,6 +7,7 @@ use App\Http\Controllers\API\IncidentController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\BarangayController;
 use App\Http\Controllers\API\ChartController;
+use App\Http\Controllers\API\NotificationController;
 use App\Http\Controllers\API\TypeController;
 use App\Http\Controllers\API\IncidentCauseController;
 
@@ -57,5 +58,8 @@ Route::middleware('auth:api')->group( function() {
     Route::get('chart/accidents',[ChartController::class, 'accidenttypechart']);
     Route::get('chart/reportdata',[ChartController::class, 'incidentchart']);
     Route::get('chart/barangay',[ChartController::class, 'barangaychart']);
+
+    Route::get('notifications',[NotificationController::class, 'index']);
+    Route::get('notifications/get20',[NotificationController::class, 'get20']);
 
 });

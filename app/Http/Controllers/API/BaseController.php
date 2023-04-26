@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller as Controller;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 
 class BaseController extends Controller
@@ -38,5 +39,12 @@ class BaseController extends Controller
             $response['data'] = $errorMessages;
         }
         return response()->json($response, $code);
+    }
+
+    public function addToNotification($type, $message, $itemId){
+        $newNotif['type'] = $type;
+        $newNotif['message'] = $message;
+        $newNotif['notif_id'] = $itemId;
+        Notification::create($newNotif);
     }
 }

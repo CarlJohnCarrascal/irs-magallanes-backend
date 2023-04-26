@@ -36,6 +36,11 @@ class RegisterController extends BaseController
         $success['imagesrc'] = $user->imagesrc;
         $success['role'] = $user->role;
 
+        $ntype = 'New User';
+        $nmsg = 'A new user ' . $success['name'] . ' has successfully registered an account!';
+        $nid = $user->id;
+        $this->addToNotification($ntype, $nmsg, $nid);
+
         return $this->sendResponse($success, 'User register successfully.');
     }
     public function login(Request $request)
