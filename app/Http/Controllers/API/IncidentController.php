@@ -190,6 +190,13 @@ class IncidentController extends BaseController
 
         $incident['informantdetail'] = $informant;
         $incident['responderdetail'] = $responder;
+
+        if (auth('api')->user()->role == 'user') {
+            $ntype = 'New Report';
+            $nmsg = '';
+            $nid = $incident->id;
+            $this->addToNotification($ntype, $nmsg, $nid);
+        }
         return $this->sendResponse($incident, 'Incident Store successfully.');
         //return response()->json("Incident Stored");
     }
