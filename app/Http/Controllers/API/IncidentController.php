@@ -192,10 +192,18 @@ class IncidentController extends BaseController
         $incident['responderdetail'] = $responder;
 
         if (auth('api')->user()->role == 'user') {
-            $ntype = 'New Report';
-            $nmsg = '';
+            $nfor = 'all';
+            $ntype = 'Report';
+            $nmsg = 'New incident reported happen in '. $incident->barangay;
             $nid = $incident->id;
-            $this->addToNotification($ntype, $nmsg, $nid);
+            $this->addToNotification($nfor, $ntype, $nmsg, $nid);
+        }
+        if (auth('api')->user()->role == 'admin') {
+            $nfor = 'user';
+            $ntype = 'Report';
+            $nmsg = 'New incident reported happen in '. $incident->barangay;
+            $nid = $incident->id;
+            $this->addToNotification($nfor, $ntype, $nmsg, $nid);
         }
         return $this->sendResponse($incident, 'Incident Store successfully.');
         //return response()->json("Incident Stored");
@@ -292,6 +300,21 @@ class IncidentController extends BaseController
         Informant::where('incidentid', $incident->id)->update($in);
         $incident->update($input);
 
+        if ($id == $incident->userid && $role == 'user') {
+            $nfor = 'admin';
+            $ntype = 'Report';
+            $nmsg = 'A user update his report from'. $incident->barangay;
+            $nid = $incident->id;
+            $this->addToNotification($nfor, $ntype, $nmsg, $nid);
+        }
+        if ($id != $incident->userid && $role == 'admin') {
+            $nfor = $incident->userid;
+            $ntype = 'Report';
+            $nmsg = 'The admin has updated your report.';
+            $nid = $incident->id;
+            $this->addToNotification($nfor, $ntype, $nmsg, $nid);
+        }
+
         return $this->sendResponse($incident, 'Incident Updated successfully.');
     }
     public function destroy(Incident $incident)
@@ -314,6 +337,15 @@ class IncidentController extends BaseController
             ->where('incidentid',$incident->id)
             ->delete();
             $incident->delete();    
+
+            if ($id != $incident->userid) {
+                $nfor = $incident->userid;
+                $ntype = 'Report';
+                $nmsg = 'The admin has deleted your report';
+                $nid = $incident->id;
+                $this->addToNotification($nfor, $ntype, $nmsg, $nid);
+            }
+
             return $this->sendResponse('', 'Incident deleted successfully!.');
         }else {
             return $this->sendError('Unauthorised.', ['error' => 'You are not allowed for this operation!']);
@@ -326,12 +358,30 @@ class IncidentController extends BaseController
         $input = $request->all();
         $input['status'] = $input['status'];
         $incident->update($input);
+
+        $id = auth('api')->user()->id;
+        if ($id != $incident->userid) {
+            $nfor = $incident->userid;
+            $ntype = 'Report';
+            $nmsg = 'The admin has change the status of your report.';
+            $nid = $incident->id;
+            $this->addToNotification($nfor, $ntype, $nmsg, $nid);
+        }
+
         return $this->sendResponse($incident, 'Incident status changed successfully.');
     }
     public function viewed(Incident $incident)
     {
         $input['seened_at'] = now();
         $incident->update($input);
+        $id = auth('api')->user()->id;
+        if ($id != $incident->userid) {
+            $nfor = $incident->userid;
+            $ntype = 'Report';
+            $nmsg = 'Your report has been seen by the admin.';
+            $nid = $incident->id;
+            $this->addToNotification($nfor, $ntype, $nmsg, $nid);
+        }
         return $this->sendResponse($incident, 'Incident Updated successfully.');
     }
     public function accept(Incident $incident)
@@ -339,6 +389,15 @@ class IncidentController extends BaseController
         $input['status'] = 'approved';
         $input['accepted_at'] = now();
         $incident->update($input);
+
+        $id = auth('api')->user()->id;
+        if ($id != $incident->userid) {
+            $nfor = $incident->userid;
+            $ntype = 'Report';
+            $nmsg = 'Your report has been approved by the admin.';
+            $nid = $incident->id;
+            $this->addToNotification($nfor, $ntype, $nmsg, $nid);
+        }
         return $this->sendResponse($incident, 'Incident Updated successfully.');
     }
 

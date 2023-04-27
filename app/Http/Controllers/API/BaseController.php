@@ -41,7 +41,8 @@ class BaseController extends Controller
         return response()->json($response, $code);
     }
 
-    public function addToNotification($type, $message, $itemId){
+    public function addToNotification($for, $type, $message, $itemId){
+        $newNotif['for_user'] = $for;
         $newNotif['type'] = $type;
         $newNotif['message'] = $message;
         $newNotif['notif_id'] = $itemId;
