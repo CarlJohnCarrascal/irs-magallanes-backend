@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\API\BaseController;
 use Illuminate\Http\Request;
 use App\Models\Notification;
+use App\Models\Notifreader;
 
 class NotificationController extends BaseController
 {
@@ -19,7 +20,7 @@ class NotificationController extends BaseController
             $res = Notification::where('for_user','=', $role)
             ->orWhere('for_user','=', $id)
             ->orWhere('for_user','=', 'all')
-            ->where('isseen','=','false')
+            ->where('isalreadyseen','=','false')
             ->orderBy('created_at', 'desc')
             ->get();
         }else{
@@ -47,14 +48,36 @@ class NotificationController extends BaseController
     }
 
     public function getnot(){
-        $res = Notification::all()->where('isseen','=',false)->count();
+        $id = auth('api')->user()->id;
+        $role = auth('api')->user()->role;
 
-        return $this->sendResponse($res, 'Notification List.');
+        $res = Notification::where('for_user','=', $role)
+        ->orWhere('for_user','=', 'all')
+        ->orWhere('for_user','=', $id)
+        ->get();
+
+        $c = $res->where('isalreadyseen','=',false)->count();
+
+        return $this->sendResponse($c, 'Notification List.');
     }
 
     public function markseen(Notification $notification){
         $notification->isseen = true;
         $notification->update();
+
+        $id = auth('api')->user()->id;
+
+        $nr = Notifreader::where('notif_id','=', $notification->id)
+        ->where('user_id','=', $id)
+        ->count();
+        if ($nr <= 0) {
+            $mc['notif_id'] = $notification->id;
+            $mc['user_id'] = $id;
+            $mc['isseen'] = true;
+    
+            Notifreader::create($mc);
+        }
+
         return $this->sendResponse('', 'Marked Seen');
     }
     

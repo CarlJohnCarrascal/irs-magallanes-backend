@@ -21,7 +21,7 @@ class Incident extends Model
         'purok',
         'latitude',
         'longitude',
-        'spicific_location',
+        'specific_location',
         'description',
         'person_involves',
         'is_police_needed',
@@ -53,6 +53,6 @@ class Incident extends Model
         return Responder::all()->where('incidentid', '=', $this->id)->first();
     }
     public function getFulllocationAttribute() {
-        return $this->purok . ' - ' . $this->barangay . ' - ' . $this->spicific_location;
+        return $this->purok . ' ' . $this->barangay . ' ' . $this->specific_location;
     }
 }
