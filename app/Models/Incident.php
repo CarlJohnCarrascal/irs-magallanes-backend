@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Incident extends Model
 {
@@ -44,7 +45,8 @@ class Incident extends Model
     ];
 
     public function getReportPatAttribute() {
-        return Patient::all()->where('incidentid', '=', $this->id);
+        //return Patient::where('incidentid', '=', $this->id)->get();
+        return DB::table('patients')->where('incidentid', '=', $this->id)->get();
     }
     public function getReportInfAttribute() {
         return Informant::all()->where('incidentid', '=', $this->id)->first();

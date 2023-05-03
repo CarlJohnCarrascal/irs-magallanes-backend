@@ -73,6 +73,7 @@ class DatabaseSeeder extends Seeder
             IncidentCause::create($input2);
 
             $input2['name'] = 'Other';
+            $input2['description'] = '';
             IncidentCause::create($input2);
         }
 
@@ -98,8 +99,9 @@ class DatabaseSeeder extends Seeder
             $input3['description'] = 'such as in building collapses or heavy machinery accidents';
             IncidentCause::create($input3);
 
-            $input2['name'] = 'Other';
-            IncidentCause::create($input2);
+            $input3['name'] = 'Other';
+            $input3['description'] = '';
+            IncidentCause::create($input3);
             
         }
 
