@@ -255,6 +255,7 @@ class IncidentController extends BaseController
 
         $hasP = count($input['patients']);
         if ($hasP > 0) {
+            Patient::where('incidentid', $incident->id)->delete();
             for ($i = 0; $i < $hasP; $i++) {
                 # code...
                 $p = $input['patients'][$i];
@@ -276,7 +277,6 @@ class IncidentController extends BaseController
                 $pa['gender'] = $p['gender'];
                 $pa['cause'] = $p['cause'];
                 $pa['status'] = $p['status'];
-                Patient::where('incidentid', $incident->id)->delete();
                 $patient = Patient::create($pa);
             }
         }
@@ -315,7 +315,7 @@ class IncidentController extends BaseController
             $this->addToNotification($nfor, $ntype, $nmsg, $nid);
         }
 
-        return $this->sendResponse($incident, 'Incident Updated successfully.');
+        return $this->sendResponse($incident, 'Incident Updated successfully.' . $hasP);
     }
     public function destroy(Incident $incident)
     {
