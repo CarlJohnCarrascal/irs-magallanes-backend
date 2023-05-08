@@ -60,6 +60,8 @@ Route::middleware('auth:api')->group( function() {
     Route::get('chart/barangay',[ChartController::class, 'barangaychart']);
 
     Route::get('notifications',[NotificationController::class, 'index']);
-    Route::get('notifications/get20',[NotificationController::class, 'get20']);
+    Route::get('notifications/getnew',[NotificationController::class, 'getnew']);
+    Route::get('notifications/getnot',[NotificationController::class, 'getnot']);
+    Route::put('notifications/{notification}',[NotificationController::class, 'markseen']);
 
 });

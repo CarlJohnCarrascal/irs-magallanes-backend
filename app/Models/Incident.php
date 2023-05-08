@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Incident extends Model
 {
@@ -21,7 +22,7 @@ class Incident extends Model
         'purok',
         'latitude',
         'longitude',
-        'spicific_location',
+        'specific_location',
         'description',
         'person_involves',
         'is_police_needed',
@@ -44,7 +45,8 @@ class Incident extends Model
     ];
 
     public function getReportPatAttribute() {
-        return Patient::all()->where('incidentid', '=', $this->id);
+        //return Patient::where('incidentid', '=', $this->id)->get();
+        return DB::table('patients')->where('incidentid', '=', $this->id)->get();
     }
     public function getReportInfAttribute() {
         return Informant::all()->where('incidentid', '=', $this->id)->first();
@@ -53,6 +55,6 @@ class Incident extends Model
         return Responder::all()->where('incidentid', '=', $this->id)->first();
     }
     public function getFulllocationAttribute() {
-        return $this->purok . ' - ' . $this->barangay . ' - ' . $this->spicific_location;
+        return $this->purok . ' ' . $this->barangay . ' ' . $this->specific_location;
     }
 }
