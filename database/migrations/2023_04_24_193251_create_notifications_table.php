@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->string('type')->nullable();
+            $table->string('type');
+            $table->string('for_user');
             $table->string('notif_id')->nullable();
             $table->string('message')->nullable();
             $table->boolean('isseen')->default(false);
