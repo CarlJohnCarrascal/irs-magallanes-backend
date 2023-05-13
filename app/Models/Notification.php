@@ -13,6 +13,7 @@ class Notification extends Model
         'type',
         'for_user',
         'message',
+        'user_id',
         'notif_id',
         'isseen',
         'seen_date',

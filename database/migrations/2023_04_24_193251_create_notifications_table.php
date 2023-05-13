@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('type')->nullable();
             $table->string('for_user')->nullable();
+            $table->string('user_id')->nullable();
             $table->string('notif_id')->nullable();
             $table->string('message')->nullable();
             $table->boolean('isseen')->default(false);

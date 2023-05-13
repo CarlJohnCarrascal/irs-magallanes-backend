@@ -15,17 +15,27 @@ class NotificationController extends BaseController
         $role = auth('api')->user()->role;
 
         $in = $request->all();
+        $page = ($in['p'] - 1) * 10;
+        if ($page > 0){
+            $page + 1;
+        }
         if ($in['unread'] == 'true'){
-            $res = Notification::all()->where('isseed','=','false');
-            $res = Notification::where('for_user','=', $role)
-            ->orWhere('for_user','=', $id)
+            //$res = Notification::all()->where('isseed','=','false');
+            $res = Notification::offset($page)
+            ->limit(10)
+            ->where('for_user','=', $role)
             ->orWhere('for_user','=', 'all')
-            ->where('isalreadyseen','=','false')
+            ->where('user_id','!=', $id)
+            ->orWhere('for_user','=', $id)
             ->orderBy('created_at', 'desc')
             ->get();
+            $res = $res->where('isalreadyseen','=', false);
         }else{
-            $res = Notification::where('for_user','=', $role)
+            $res = Notification::offset($page)
+            ->limit(10)
+            ->where('for_user','=', $role)
             ->orWhere('for_user','=', 'all')
+            ->where('user_id','!=', $id)
             ->orWhere('for_user','=', $id)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -41,6 +51,7 @@ class NotificationController extends BaseController
         ->limit(5)
         ->where('for_user','=', $role)
             ->orWhere('for_user','=', 'all')
+            ->where('user_id','!=', $id)
             ->orWhere('for_user','=', $id)
             ->orderBy('created_at', 'desc')
         ->get();
@@ -53,7 +64,8 @@ class NotificationController extends BaseController
 
         $res = Notification::where('for_user','=', $role)
         ->orWhere('for_user','=', 'all')
-        ->orWhere('for_user','=', $id)
+            ->where('user_id','!=', $id)
+            ->orWhere('for_user','=', $id)
         ->get();
 
         $c = $res->where('isalreadyseen','=',false)->count();

@@ -66,8 +66,17 @@ class UserController extends BaseController
         $user1 = auth('api')->user();
         if ($user1->role == 'admin') {
             $user->delete();
+            DB::table('incidents')->where('user_id', $user->id)->delete();
             return $this->sendResponse($user, 'user deleted successfully!.');
         }
+
+        // $role = auth('api')->user()->role;
+        // if ($role == 'admin'){
+        //     $user->update(['status' => 'deleted']);
+        //     return $this->sendResponse('Success', 'User has been deleted successfully.');
+        // }else{
+        //     return $this->sendError('Unauthorised.', ['error' => 'Your not allowed for this operation!']);
+        // }
     }
 
     public function deactivate(User $user)

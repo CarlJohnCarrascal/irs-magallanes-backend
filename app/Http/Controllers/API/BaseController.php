@@ -43,6 +43,7 @@ class BaseController extends Controller
 
     public function addToNotification($for, $type, $message, $itemId){
         $newNotif['for_user'] = $for;
+        $newNotif['user_id'] = auth('api')->user()->id;
         $newNotif['type'] = $type;
         $newNotif['message'] = $message;
         $newNotif['notif_id'] = $itemId;
