@@ -40,7 +40,7 @@ class RegisterController extends BaseController
         $ntype = 'New User';
         $nmsg = 'A new user ' . $success['name'] . ' has successfully registered an account!';
         $nid = $user->id;
-        $this->addToNotification($nFor, $ntype, $nmsg, $nid);
+        $this->addToNotification($nFor, $ntype, $nmsg, $nid, true, $nid);
 
         return $this->sendResponse($success, 'User register successfully.');
     }

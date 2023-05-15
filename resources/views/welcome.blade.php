@@ -52,8 +52,8 @@
       }
     };
   </script>
-  <script type="module" crossorigin src="../assets/index-90e80c42.js"></script>
-  <link rel="stylesheet" href="../assets/index-3160904d.css">
+  <script type="module" crossorigin src="../assets/index-99be98bc.js"></script>
+  <link rel="stylesheet" href="../assets/index-8b3b1a0b.css">
 </head>
 <div style="height: 1px;">
   <div id="loader" class="center">

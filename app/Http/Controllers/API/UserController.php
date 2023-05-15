@@ -66,7 +66,9 @@ class UserController extends BaseController
         $user1 = auth('api')->user();
         if ($user1->role == 'admin') {
             $user->delete();
-            DB::table('incidents')->where('user_id', $user->id)->delete();
+            DB::table('incidents')->where('userid', $user->id)->delete();
+            DB::table('notifications')->where('user_id', $user->id)->delete();
+            DB::table('notifreaders')->where('user_id', $user->id)->delete();
             return $this->sendResponse($user, 'user deleted successfully!.');
         }
 
